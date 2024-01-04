@@ -8,6 +8,7 @@ add_compile_options(-W -Wall)
 file(GLOB CORE_SRC lib/core/*.c)
 add_library(core STATIC ${CORE_SRC})
 target_include_directories(core PUBLIC include)
+target_link_libraries(core PUBLIC inst)
 
 file(GLOB INST_SRC lib/instructions/*.c)
 add_library(inst STATIC ${INST_SRC})
@@ -21,9 +22,13 @@ add_library(mapper STATIC lib/mapper.c ${MAPPER_SRC})
 target_include_directories(mapper PUBLIC include)
 target_link_libraries(mapper PUBLIC core)
 
+add_library(emulator STATIC lib/emulator.c)
+target_include_directories(emulator PUBLIC include)
+target_link_libraries(emulator PUBLIC core mapper cartridge)
+
 add_executable(nes_emulator main.c)
 target_include_directories(nes_emulator PUBLIC include)
-target_link_libraries(nes_emulator PRIVATE core inst cartridge mapper)
+target_link_libraries(nes_emulator PRIVATE emulator)
 
 # # Build test
 # file(GLOB TEST_SRCS test/*.test.cpp)

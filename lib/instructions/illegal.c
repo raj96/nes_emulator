@@ -13,6 +13,8 @@ extern void __lsr_mem_op();
 extern void __base_and();
 extern void __base_ora();
 extern void __base_eor();
+extern void __base_dec();
+extern void __base_cmp();
 
 void __base_aac() {
     CPU->A &= mem_read(CPU->PC);
@@ -41,8 +43,7 @@ const instruction aac_imm2 = {
 
 void __base_aax() {
     CPU->__dl = CPU->X & CPU->A;
-    CPU->PS.flags.N = CPU->__dl >> 7;
-    CPU->PS.flags.Z = CPU->__dl == 0x00;
+
     mem_write(CPU->__al, CPU->__dl);
     CPU->__cycles++;
 }
@@ -196,10 +197,8 @@ const instruction axs_imm = {
 };
 
 void __base_dcp() {
-    uint16_t res = CPU->__dl - 1;
-    mem_write(CPU->__al, res);
-
-    CPU->PS.flags.C = res >> 8;
+    __base_dec();
+    __base_cmp();
     CPU->__cycles++;
 }
 
@@ -377,7 +376,7 @@ const instruction dop_zpx6 = {
 };
 
 void __base_isc() {
-    CPU->__al++;
+    mem_write(CPU->__al, CPU->__dl + 1);
     CPU->__dl = 255 - mem_read(CPU->__al);
     __base_adc();
 }

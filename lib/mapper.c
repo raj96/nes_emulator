@@ -1,10 +1,11 @@
-#include <mapper.h>
-#include <core/memory.h>
-#include <log.h>
+#include "mapper.h"
+#include "core/memory.h"
+#include "core/ppu.h"
+#include "log.h"
 #include <string.h>
 
 
-void load_cartridge_via_mapper(_cartridge cartridge, _mapper mapper) {
+void load_cartridge_via_mapper(cartridge_t cartridge, _mapper mapper) {
     if(cartridge.prg_rom_size == 16384) {
         mapper.prg_rom_mode = Mapper0Nrom128;
     } else {
@@ -17,6 +18,11 @@ void load_cartridge_via_mapper(_cartridge cartridge, _mapper mapper) {
         memcpy(RAM + mapper.rom_addr_start + 16384, cartridge.prg_rom, 16384);
     } else if (mapper.prg_rom_mode == Mapper0Nrom256) {
         memcpy(RAM + mapper.rom_addr_start + 16384, cartridge.prg_rom + 16384, 16384);
+    }
+
+    if(cartridge.chr_rom_size > 0) {
+        // Load CHR data into PPU
+        memcpy(PPU->vram, cartridge.chr_rom, 0x2000);
     }
     
     mem_write(MEM_PWR_ON_RST_L, mapper.rom_addr_start & 0xff);

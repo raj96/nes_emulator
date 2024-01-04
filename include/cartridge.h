@@ -17,8 +17,8 @@ typedef struct {
     uint8_t mapper;
 
     Mirroring mirror_mode;
-} _cartridge;
+} cartridge_t;
 
-_cartridge load_cartridge(char *nes_file_loc);
-void destroy_cartridge(_cartridge cartridge);
+cartridge_t load_cartridge(char *nes_file_loc);
+void destroy_cartridge(cartridge_t cartridge);
 #endif

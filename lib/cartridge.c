@@ -34,7 +34,7 @@ typedef union {
     } fields;
 } _nes_header;
 
-_cartridge load_cartridge(char *nes_file_loc) {
+cartridge_t load_cartridge(char *nes_file_loc) {
     FILE *nes_file = fopen(nes_file_loc, "rb");
     if(nes_file == NULL) {
         LOGF("Could not load NES file");
@@ -50,7 +50,7 @@ _cartridge load_cartridge(char *nes_file_loc) {
     fclose(nes_file);
 
     _nes_header *header = (_nes_header *)(nes_content);
-    _cartridge cartridge;
+    cartridge_t cartridge;
 
     if(header->fields.header != NES_HEADER_MAGIC) {
         LOGF("%s is not a valid nes file", nes_file_loc);
@@ -84,7 +84,7 @@ _cartridge load_cartridge(char *nes_file_loc) {
     return cartridge;
 }
 
-void destroy_cartridge(_cartridge cartridge) {
+void destroy_cartridge(cartridge_t cartridge) {
     free(cartridge.prg_rom);
     if(cartridge.chr_rom != NULL)
         free(cartridge.chr_rom);

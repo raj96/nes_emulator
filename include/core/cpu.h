@@ -4,6 +4,20 @@
 #ifndef __cpu
 #define __cpu
 
+#define PPU_CTRL 0x2000
+#define PPU_MASK 0x2001
+#define PPU_STATUS 0x2002
+#define PPU_OAMADDR 0x2003
+#define PPU_OAMDATA 0x2004
+#define PPU_SCROLL 0x2005
+#define PPU_ADDR 0x2006
+#define PPU_DATA 0x2007
+#define PPU_OAMDMA 0x4014
+
+#define PPU_ADDR_BEGIN 0x2000
+#define PPU_ADDR_END 0x3fff
+#define PPU_MIRROR_ADDR_END 0x2007
+
 #define CPU_MEM_RANGE_BEGIN 0x0000
 #define CPU_MEM_RANGE_END 0x1FFF
 #define CPU_MEM_MIRROR_END 0x07FF
@@ -20,7 +34,7 @@ typedef union {
 		uint8_t V:1;	//Overflow flag
 		uint8_t N:1;	//Negative flag
 	} flags;
-} _processor_status;
+} processor_status_t;
 
 typedef struct _cpu
 {
@@ -35,7 +49,7 @@ typedef struct _cpu
 	uint8_t X, Y;
 
 	// Processor status register
-	_processor_status PS;
+	processor_status_t PS;
 
 	// Track cycle number
 	uint32_t __cycles;
@@ -45,9 +59,9 @@ typedef struct _cpu
 	uint16_t __al;
 	// Processor lock, used by illegal opcode KIL
 	uint8_t __lock;
-} cpu;
+} cpu_t;
 
-extern cpu *CPU;
+extern cpu_t *CPU;
 
 void init_cpu();
 void print_cpu_state();

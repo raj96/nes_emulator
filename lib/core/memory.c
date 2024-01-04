@@ -25,22 +25,22 @@ void init_memory()
 void mem_write(uint16_t address, uint8_t data)
 {
 	if(address <= CPU_MEM_RANGE_END) {
-		// printf("Wrote %02X to %04X\n", data, address);
 		RAM[address & CPU_MEM_MIRROR_END] = data;
-	} else if(address >= PPU_ADDR_BEGIN && address <= PPU_ADDR_END) {
-		ppu_write(address, data);
-	} else {
-		// printf("Wrote %02X to %04X\n", data, address);
+	} 
+	else if(address >= PPU_ADDR_BEGIN && address <= PPU_ADDR_END) {
+		RAM[address & PPU_MIRROR_ADDR_END] = data;
+		ppu_write(address & PPU_MIRROR_ADDR_END, data);
+	}
+	 else {
 		RAM[address] = data;
 	}
 }
 
 uint8_t mem_read(uint16_t address) {
 	if(address <= CPU_MEM_RANGE_END) {
-		// printf("\nRead %02X from %04X\n", RAM[address & CPU_MEM_MIRROR_END], address);
 		return RAM[address & CPU_MEM_MIRROR_END];
 	} else if(address >= PPU_ADDR_BEGIN && address <= PPU_ADDR_END) {
-		return ppu_read(address);
+		return ppu_read(address & PPU_MIRROR_ADDR_END);
 	} else {
 		return RAM[address];
 	}

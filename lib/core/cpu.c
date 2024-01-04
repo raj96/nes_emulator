@@ -8,11 +8,11 @@
 
 #include <log.h>
 
-cpu *CPU = NULL;
+cpu_t *CPU = NULL;
 
 void init_cpu() {
     if (!CPU) {
-        CPU = (cpu *)malloc(sizeof(cpu));
+        CPU = (cpu_t *)malloc(sizeof(cpu_t));
     }
     CPU->SP = (uint8_t)-3;
     CPU->A = 0x00;
@@ -199,7 +199,7 @@ void reset() {
     CPU->__lock = 0;
     CPU->PC = mem_read(MEM_PWR_ON_RST_L);
     CPU->PC |= mem_read(MEM_PWR_ON_RST_H) << 8;
-    LOGI("PC: %04X\t\t", CPU->PC);
+    // LOGI("PC: %04X\t\t", CPU->PC);
 }
 
 void fde() {

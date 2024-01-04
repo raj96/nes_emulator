@@ -21,6 +21,6 @@ typedef struct {
 extern const _mapper 
     mapper_000;
 
-void load_cartridge_via_mapper(_cartridge cartridge, _mapper mapper);
+void load_cartridge_via_mapper(cartridge_t cartridge, _mapper mapper);
 
 #endif
